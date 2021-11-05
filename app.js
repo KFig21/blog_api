@@ -89,7 +89,6 @@ passport.use(
 var app = express();
 
 //Set up mongoose connection
-var mongoose = require("mongoose");
 var mongoDB = process.env.DB_CONNECTION_STRING;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
