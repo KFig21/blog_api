@@ -46,6 +46,7 @@ exports.signup = [
 ];
 
 exports.login = async (req, res, next) => {
+  console.log("adminController start");
   passport.authenticate("login", async (err, user, info) => {
     try {
       if (err || !user) {
@@ -68,6 +69,7 @@ exports.login = async (req, res, next) => {
       return next(error);
     }
   })(req, res, next);
+  console.log("adminController end");
 };
 
 exports.logout = function (req, res) {

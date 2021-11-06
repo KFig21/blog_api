@@ -29,6 +29,7 @@ passport.use(
       passwordField: "password",
     },
     async (username, password, done) => {
+      console.log("app.js start");
       try {
         const user = await Admin.findOne({ username });
 
@@ -46,6 +47,7 @@ passport.use(
       } catch (error) {
         return done(error);
       }
+      console.log("app.js end");
     }
   )
 );
