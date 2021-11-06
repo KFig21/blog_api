@@ -1,3 +1,4 @@
+require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -7,14 +8,17 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const compression = require("compression");
 const helmet = require("helmet");
-
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const JWTstrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
 
-const Author = require("./models/author");
-require("dotenv").config();
+// Import routes
+const indexRouter = require("./routes/index");
+const apiRouter = require("./routes/api");
+
+// Import models
+const Author = require("./models/admin");
 
 // Passport auth
 passport.use(
@@ -49,7 +53,7 @@ passport.use(
 passport.use(
   new JWTstrategy(
     {
-      secretOrKey: process.env.SECRET,
+      secretOrKey: process.env.SECRET_KEY,
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     },
     async (token, done) => {
@@ -81,19 +85,18 @@ passport.use(
   )
 );
 
-const indexRouter = require("./routes/index");
-const apiRouter = require("./routes/api");
+// Create app
+var app = express();
 
+//Set up mongoose connection
 var mongoDB = process.env.DB_CONNECTION_STRING;
-mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "mongo connection error"));
-
-const app = express();
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug");
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "jade");
 
 app.use(helmet());
 app.use(compression());
@@ -104,9 +107,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// Use Routes
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
 
+// ERROR handler
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

@@ -2,7 +2,7 @@ const Post = require("../models/post");
 const { body, validationResult } = require("express-validator");
 
 exports.create_post = [
-  body("author_name", "Empty name").trim().escape(),
+  body("author", "Empty name").trim().escape(),
   body("title", "text").trim().escape(),
 
   function (req, res, next) {
@@ -15,9 +15,9 @@ exports.create_post = [
       return;
     }
     // title, date - default to created time, author, published - default to false
-    const { author_name, title, text } = req.body;
+    const { author, title, text } = req.body;
     const post = new Post({
-      author_name,
+      author,
       title,
       text,
     });
@@ -58,9 +58,9 @@ exports.get_single_post = async function (req, res, next) {
 
 exports.update_post = async function (req, res, next) {
   try {
-    const { author_name, title, text } = req.body;
+    const { author, title, text } = req.body;
     const post = await Post.findByIdAndUpdate(req.params.id, {
-      author_name,
+      author,
       title,
       text,
     });

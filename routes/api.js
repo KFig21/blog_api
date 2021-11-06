@@ -1,7 +1,7 @@
 const express = require("express");
 const post_controller = require("../controllers/postController");
-const comment_controller = require("../controllers/commentController");
-const author_controller = require("../controllers/authorController");
+const comment_controller = require("../controllers/commentController.js");
+const admin_controller = require("../controllers/adminController");
 const passport = require("passport");
 const router = express.Router();
 
@@ -72,13 +72,13 @@ router.delete(
   comment_controller.delete_comment
 );
 
-// create author - api/signup
-router.post("/sign-up", author_controller.signup);
+// create admin - api/signup
+router.post("/sign-up", admin_controller.signup);
 
 // login - api/login
-router.post("/login", author_controller.login);
+router.post("/login", admin_controller.login);
 
 // logout - api/logout
-router.get("/logout", author_controller.logout);
+router.get("/logout", admin_controller.logout);
 
 module.exports = router;

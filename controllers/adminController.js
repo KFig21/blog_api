@@ -1,4 +1,4 @@
-const Author = require("../models/author");
+const Admin = require("../models/admin");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
@@ -9,7 +9,7 @@ exports.signup = [
     .escape()
     .custom(async (username) => {
       try {
-        const existingUsername = await Author.findOne({ username: username });
+        const existingUsername = await Admin.findOne({ username: username });
         if (existingUsername) {
           throw new Error("username already in use");
         }
@@ -26,7 +26,6 @@ exports.signup = [
     return true;
   }),
   async (req, res, next) => {
-    const errors = validationResult(req);
     passport.authenticate("signup", { session: false }, (err, user, info) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -54,12 +53,12 @@ exports.login = async (req, res, next) => {
 
         return next(error);
       }
-
+      console.log("test");
       req.login(user, { session: false }, async (error) => {
         if (error) return next(error);
 
         const body = { _id: user._id, username: user.username };
-        const token = jwt.sign({ user: body }, process.env.SECRET, {
+        const token = jwt.sign({ user: body }, process.env.SECRET_KEY, {
           expiresIn: "1d",
         });
 
