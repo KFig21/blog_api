@@ -1,4 +1,3 @@
-require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -8,17 +7,14 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const compression = require("compression");
 const helmet = require("helmet");
+
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const JWTstrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
 
-// Import routes
-const indexRouter = require("./routes/index");
-const apiRouter = require("./routes/api");
-
-// Import models
-const Admin = require("./models/admin");
+const Author = require("./models/author");
+require("dotenv").config();
 
 // Passport auth
 passport.use(
@@ -29,9 +25,8 @@ passport.use(
       passwordField: "password",
     },
     async (username, password, done) => {
-      console.log("app.js start");
       try {
-        const user = await Admin.findOne({ username });
+        const user = await Author.findOne({ username });
 
         if (!user) {
           return done(null, false, { message: "User not found" });
@@ -47,7 +42,6 @@ passport.use(
       } catch (error) {
         return done(error);
       }
-      console.log("app.js end");
     }
   )
 );
@@ -55,7 +49,7 @@ passport.use(
 passport.use(
   new JWTstrategy(
     {
-      secretOrKey: process.env.SECRET_KEY,
+      secretOrKey: process.env.SECRET,
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     },
     async (token, done) => {
@@ -77,7 +71,7 @@ passport.use(
     },
     async (username, password, done) => {
       try {
-        const user = await Admin.create({ username, password });
+        const user = await Author.create({ username, password });
 
         return done(null, user);
       } catch (error) {
@@ -87,18 +81,19 @@ passport.use(
   )
 );
 
-// Create app
-var app = express();
+const indexRouter = require("./routes/index");
+const apiRouter = require("./routes/api");
 
-//Set up mongoose connection
 var mongoDB = process.env.DB_CONNECTION_STRING;
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
+mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "mongo connection error"));
+
+const app = express();
 
 // view engine setup
-// app.set("views", path.join(__dirname, "views"));
-// app.set("view engine", "jade");
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
 
 app.use(helmet());
 app.use(compression());
@@ -109,11 +104,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Use Routes
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
 
-// ERROR handler
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

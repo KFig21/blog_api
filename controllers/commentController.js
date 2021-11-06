@@ -33,7 +33,7 @@ exports.get_comment = async function (req, res, next) {
     if (!comment) {
       return res
         .status(404)
-        .json({ err: `Comment with id ${req.params.commentid} not found` });
+        .json({ err: `comment with id ${req.params.commentid} not found` });
     }
     res.status(200).json({ comment });
   } catch (err) {
@@ -47,7 +47,7 @@ exports.get_comments = async function (req, res, next) {
       (comment) => comment.postId === req.params.postid
     );
     if (!comments) {
-      return res.status(404).json({ err: `Comments not found` });
+      return res.status(404).json({ err: `comments not found` });
     }
     res.status(200).json({ comments });
   } catch (err) {
@@ -63,25 +63,24 @@ exports.update_comment = async function (req, res, next) {
       user,
     });
     if (!comment) {
-      return res.status(404).json({ msg: "Updated sucessfuly" });
+      return res.status(404).json({ msg: "updated sucessfuly" });
     }
-    res.status(200).json({ msg: "Updated sucessfuly" });
+    res.status(200).json({ msg: "updated sucessfuly" });
   } catch (err) {
     next(err);
   }
 };
-
 exports.delete_post_comments = async function (req, res, next) {
   try {
     const comment = await Comment.deleteMany({ postId: req.params.postid });
     if (!comment) {
       return res
         .status(404)
-        .json({ err: `Comment with id ${req.params.id} not found` });
+        .json({ err: `comment with id ${req.params.id} not found` });
     }
     res
       .status(200)
-      .json({ msg: `Comment ${req.params.id} deleted sucessfuly` });
+      .json({ msg: `comment ${req.params.id} deleted sucessfuly` });
   } catch (err) {
     next(err);
   }
@@ -93,11 +92,11 @@ exports.delete_comment = async function (req, res, next) {
     if (!comment) {
       return res
         .status(404)
-        .json({ err: `Comment with id ${req.params.id} not found` });
+        .json({ err: `comment with id ${req.params.id} not found` });
     }
     res
       .status(200)
-      .json({ msg: `Comment ${req.params.id} deleted sucessfuly` });
+      .json({ msg: `comment ${req.params.id} deleted sucessfuly` });
   } catch (err) {
     next(err);
   }
