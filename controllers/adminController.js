@@ -54,12 +54,8 @@ exports.login = async (req, res, next) => {
 
         return next(error);
       }
-      console.log("test1");
       req.login(user, { session: false }, async (error) => {
-        if (error) {
-          console.log("test2", error);
-          return next(error);
-        }
+        if (error) return next(error);
 
         const body = { _id: user._id, username: user.username };
         const token = jwt.sign({ user: body }, process.env.SECRET_KEY, {
@@ -69,7 +65,6 @@ exports.login = async (req, res, next) => {
         return res.json({ token });
       });
     } catch (error) {
-      console.log("test3", error);
       return next(error);
     }
   })(req, res, next);

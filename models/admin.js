@@ -16,7 +16,6 @@ AdminSchema.pre("save", async function (next) {
 });
 
 AdminSchema.methods.isValidPassword = async function (password) {
-  console.log("test");
   const user = this;
   const compare = await bcrypt.compare(password, user.password);
   return compare;
