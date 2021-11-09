@@ -5,10 +5,10 @@ const commentSchema = new Schema({
   date: { type: Date, default: Date.now, required: true },
   text: { required: true, type: String },
   user: { required: true, type: String },
-  postId: { type: String, required: true },
+  postId: { type: Schema.Types.ObjectId, ref: "Post" },
 });
 
-commentSchema.virtual("date_formated").get(function () {
+commentSchema.virtual("submitted").get(function () {
   return DateTime.fromJSDate(this.date).toLocaleString(DateTime.DATETIME_MED);
 });
 

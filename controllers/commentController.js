@@ -1,4 +1,5 @@
 const Comment = require("../models/comment");
+const Post = require("../models/post");
 const { body, validationResult } = require("express-validator");
 
 exports.create_comment = [

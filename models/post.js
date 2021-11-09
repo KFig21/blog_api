@@ -7,6 +7,7 @@ const postSchema = new Schema({
   text: { required: true, type: String },
   author: { required: true, type: String },
   published: { default: false, type: Boolean },
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 });
 
 postSchema.virtual("date_formated").get(function () {
