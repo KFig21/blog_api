@@ -3,20 +3,14 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
   title: { type: String, required: true },
-  date: { default: Date.now(), type: Date },
+  date: { type: Date, default: Date.now, required: true },
   text: { required: true, type: String },
   author: { required: true, type: String },
   published: { default: false, type: Boolean },
 });
 
 postSchema.virtual("date_formated").get(function () {
-  return this.date.toLocaleDateString("en-gb", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minutes: "2-digit",
-  });
+  return DateTime.fromJSDate(this.date).toLocaleString(DateTime.DATETIME_MED);
 });
 
 const Post = mongoose.model("Post", postSchema);
