@@ -14,7 +14,6 @@ exports.create_comment = [
       });
       return;
     }
-
     const { text, user } = req.body;
     const postId = req.params.postid;
     const comment = new Comment({ text, user, postId });
@@ -43,9 +42,9 @@ exports.get_comment = async function (req, res, next) {
 exports.get_comments = async function (req, res, next) {
   try {
     const allComments = await Comment.find({});
-    const comments = allComments.filter(
-      (comment) => comment.postId === req.params.postid
-    );
+    const comments = allComments
+      .filter((comment) => comment.postId === req.params.postid)
+      .sort((a, b) => a.date - b.date);
     if (!comments) {
       return res.status(404).json({ err: `Comments not found` });
     }
