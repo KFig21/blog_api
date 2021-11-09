@@ -44,7 +44,7 @@ exports.get_comments = async function (req, res, next) {
     const allComments = await Comment.find({});
     const comments = allComments
       .filter((comment) => comment.postId === req.params.postid)
-      .sort((a, b) => a.date - b.date);
+      .sort((a, b) => b.date - a.date);
     if (!comments) {
       return res.status(404).json({ err: `Comments not found` });
     }
