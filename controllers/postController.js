@@ -32,7 +32,8 @@ exports.create_post = [
 
 exports.get_posts = async function (req, res, next) {
   try {
-    const posts = await Post.find({});
+    var posts = await Post.find({});
+    posts.sort((a, b) => b.date - a.date);
     if (!posts) {
       return res.status(404).json({ err: "posts not found" });
     }
