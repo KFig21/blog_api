@@ -63,9 +63,9 @@ exports.get_single_post = async function (req, res, next) {
 
 exports.update_post = async function (req, res, next) {
   try {
-    const { author, title, text, slug, sanitizedHtml } = req.body;
-    // const slug = slugify(this, { lower: true, strict: true })
-    // const sanitizedHtml = dompurify.sanitize(marked(text))
+    const { author, title, text } = req.body;
+    const slug = slugify(this, { lower: true, strict: true });
+    const sanitizedHtml = dompurify.sanitize(marked(text));
     const post = await Post.findByIdAndUpdate(req.params.id, {
       author,
       title,
