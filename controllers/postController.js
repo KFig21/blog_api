@@ -1,9 +1,5 @@
 const Post = require("../models/post");
 const { body, validationResult } = require("express-validator");
-const marked = require("marked");
-const createDomPurify = require("dompurify");
-const { JSDOM } = require("jsdom");
-const dompurify = createDomPurify(new JSDOM().window);
 
 exports.create_post = [
   body("author", "Empty name").trim().escape(),
@@ -64,15 +60,12 @@ exports.get_single_post = async function (req, res, next) {
 exports.update_post = async function (req, res, next) {
   try {
     const { author, title, text } = req.body;
-    const slug = slugify(this, { lower: true, strict: true });
-    const sanitizedHtml = dompurify.sanitize(marked(text));
     const post = await Post.findByIdAndUpdate(req.params.id, {
       author,
       title,
       text,
-      slug,
-      sanitizedHtml,
     });
+    console.log(post);
     if (!post) {
       return res.status(404).json({ msg: "updated sucessfuly" });
     }
