@@ -30,7 +30,7 @@ PostSchema.pre("validate", function (next) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
 
-  // sanitize post so it cannot be hacked
+  // sanitize post so it cannot be hacked. Set it up for markdown
   if (this.text) {
     this.sanitizedHtml = dompurify.sanitize(marked(this.text));
   }
