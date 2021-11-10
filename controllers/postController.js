@@ -61,16 +61,12 @@ exports.update_post = async function (req, res, next) {
   try {
     let post = await Post.findById(req.params.id);
     post.title = req.body.title;
-    post.author = req.body.text;
+    post.author = req.body.author;
     post.text = req.body.text;
+    console.log(post);
+    post = await post.save();
     if (!post) {
       return res.status(404).json({ msg: "updated sucessfuly" });
-    }
-    try {
-      post = await post.save();
-      res.redirect(`/posts/${post._id}`);
-    } catch (err) {
-      next(err);
     }
     res.status(200).json({ msg: "updated sucessfuly" });
   } catch (err) {
