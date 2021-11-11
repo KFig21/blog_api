@@ -6,6 +6,7 @@ const marked = require("marked");
 const createDomPurify = require("dompurify");
 const { JSDOM } = require("jsdom");
 const dompurify = createDomPurify(new JSDOM().window);
+dompurify.setConfig({ ADD_ATTR: ["target"] });
 
 const PostSchema = new Schema(
   {
@@ -36,14 +37,6 @@ PostSchema.pre("validate", function (next) {
   }
 
   next();
-});
-
-dompurify.addHook(this.sanitizedHtml, function (node) {
-  // set all elements owning target to target=_blank
-  if ("target" in node) {
-    node.setAttribute("target", "_blank");
-    node.setAttribute("rel", "noopener");
-  }
 });
 
 PostSchema.virtual("submitted").get(function () {
