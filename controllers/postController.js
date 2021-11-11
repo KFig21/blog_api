@@ -63,10 +63,9 @@ exports.update_post = async function (req, res, next) {
     post.title = req.body.title;
     post.author = req.body.author;
     post.text = req.body.text;
-    console.log(post);
     post = await post.save();
     if (!post) {
-      return res.status(404).json({ msg: "updated sucessfuly" });
+      return res.status(404).json({ msg: "updated failed" });
     }
     res.status(200).json({ msg: "updated sucessfuly" });
   } catch (err) {
