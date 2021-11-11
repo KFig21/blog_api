@@ -14,6 +14,7 @@ const PostSchema = new Schema(
     date: { type: Date, default: Date.now, required: true },
     text: { required: true, type: String },
     author: { required: true, type: String },
+    description: { required: true, type: String },
     published: { default: false, type: Boolean },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     slug: { type: String, required: true, unique: true },

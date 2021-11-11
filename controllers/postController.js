@@ -15,11 +15,12 @@ exports.create_post = [
       return;
     }
     // title, date - default to created time, author, published - default to false
-    const { author, title, text } = req.body;
+    const { author, title, text, description } = req.body;
     const post = new Post({
       author,
       title,
       text,
+      description,
     });
     post.save((err) => {
       if (err) {
@@ -63,6 +64,7 @@ exports.update_post = async function (req, res, next) {
     post.title = req.body.title;
     post.author = req.body.author;
     post.text = req.body.text;
+    post.description = req.body.description;
     post = await post.save();
     if (!post) {
       return res.status(404).json({ msg: "updated failed" });
