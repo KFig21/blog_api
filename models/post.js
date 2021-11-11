@@ -24,6 +24,14 @@ const PostSchema = new Schema(
   }
 );
 
+dompurify.addHook("afterSanitizeAttributes", function (node) {
+  // set all elements owning target to target=_blank
+  if ("target" in node) {
+    node.setAttribute("target", "_blank");
+    node.setAttribute("rel", "noopener");
+  }
+});
+
 PostSchema.pre("validate", function (next) {
   // create slug for url using post title
   if (this.title) {
@@ -33,13 +41,6 @@ PostSchema.pre("validate", function (next) {
   // sanitize post so it cannot be hacked. Set it up for markdown
   if (this.text) {
     this.sanitizedHtml = dompurify.sanitize(marked(this.text));
-    dompurify.addHook("afterSanitizeAttributes", function (node) {
-      // set all elements owning target to target=_blank
-      if ("target" in node) {
-        node.setAttribute("target", "_blank");
-        node.setAttribute("rel", "noopener");
-      }
-    });
   }
 
   next();
