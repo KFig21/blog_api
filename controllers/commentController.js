@@ -18,11 +18,15 @@ exports.create_comment = [
     const { text, user } = req.body;
     const postId = req.params.postid;
     const comment = new Comment({ text, user, postId });
+    let post = await Post.findById(postId);
+    post.comments = [...post.comments, comment];
+    post = await post.save();
+    console.log("post.comments", post.comments);
     comment.save((err) => {
       if (err) {
         return next(err);
       }
-      res.status(200).json({ msg: "comment sent" });
+      res.status(200).json({ msg: `comment ${comment._id} sent` });
     });
   },
 ];
@@ -90,15 +94,25 @@ exports.delete_post_comments = async function (req, res, next) {
 
 exports.delete_comment = async function (req, res, next) {
   try {
-    const comment = await Comment.findByIdAndDelete(req.params.commentid);
+    let commentId = req.params.commentid;
+    // delete comment from post
+    let post = await Post.findById(req.params.postid);
+    let commentInPost = await Comment.findById(commentId);
+    console.log("commentInPost", commentInPost._id);
+    let newComments = await post.comments.filter(
+      (comment) => comment.toString() !== commentInPost._id.toString()
+    );
+    console.log("newComments", newComments);
+    post.comments = [...newComments];
+    post = await post.save();
+    // delete comment from comments
+    const comment = await Comment.findByIdAndDelete(commentId);
     if (!comment) {
       return res
         .status(404)
-        .json({ err: `Comment with id ${req.params.id} not found` });
+        .json({ err: `Comment with id ${commentId} not found` });
     }
-    res
-      .status(200)
-      .json({ msg: `Comment ${req.params.id} deleted sucessfuly` });
+    res.status(200).json({ msg: `Comment ${commentId} deleted sucessfuly` });
   } catch (err) {
     next(err);
   }
