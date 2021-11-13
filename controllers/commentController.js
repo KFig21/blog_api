@@ -98,11 +98,9 @@ exports.delete_comment = async function (req, res, next) {
     // delete comment from post
     let post = await Post.findById(req.params.postid);
     let commentInPost = await Comment.findById(commentId);
-    console.log("commentInPost", commentInPost._id);
     let newComments = await post.comments.filter(
       (comment) => comment.toString() !== commentInPost._id.toString()
     );
-    console.log("newComments", newComments);
     post.comments = [...newComments];
     post = await post.save();
     // delete comment from comments
