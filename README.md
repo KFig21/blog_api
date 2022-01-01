@@ -15,6 +15,7 @@
   <li>Express</li>
   <li>ReactJS</li>
   <li>NodeJS</li>
+  <li>PassportJS</li>
   <li>SASS</li>
  </ul>
 
@@ -23,7 +24,7 @@
   <li>Responsive design</li>
   <li>Markdown text in blog posts thanks to <a href="https://www.npmjs.com/package/marked" target="_blank" rel="noopener noreferrer">marked</a> and <a href=https://www.npmjs.com/package/dompurify target="_blank" rel="noopener noreferrer">dompurify</a></li>
   <li>Vistors dont need an account to leave a comment</li>
-  <li>Passport Authentication for Admins (CMS only)</li>
+  <li>Passport Authentication using JSON web token for Admins (CMS only)</li>
   <li>MERN stack CRUD application</li>
  </ul>
 
